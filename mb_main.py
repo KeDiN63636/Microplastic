@@ -68,7 +68,13 @@ def data_create(img, img_clear):
         mean_color_int = map(int, mean_color)
         mean_color_str = ', '.join(map(str, mean_color_int))
 
-
+        with sql.connect('Data.sqlite') as db:
+            cursor = db.cursor()
+            cursor.execute(
+                """INSERT INTO data (id, weight, hight, color) VALUES (?, ?, ?, ?)""",
+                (i, float(f'{diameter_outside_mm:.2f}'), float(f'{diameter_inside_mm:.2f}'), mean_color_str)
+            )
+            db.commit()
     # Сохранение вырезанных объектов как отдельные изображения
     #     cv2.imwrite(f'object_{i}.png', output)
 
